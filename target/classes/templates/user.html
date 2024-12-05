@@ -3,11 +3,9 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <head>
-        <!--мета тэги-->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!--Bootstrap CSS(есть в настройке к подключению буутстрапа https://bootstrap-4.ru/docs/4.5/getting-started/introduction/ -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
               crossorigin="anonymous">
@@ -23,13 +21,8 @@
 </head>
 <body>
 
-<!--Верхний бар(панель навигации, часть кода взята из https://bootstrap-4.ru/articles/cheatsheet/#navbar__bg-dark
-другая из инструкции к заданию https://getbootstrap.com/docs/4.0/components/navbar/-->
-
 <nav class="navbar navbar-dark bg-dark">
     <span class="navbar-brand mb-0 h1">
-
-        <!-- Для отображения имейла и роли залогинившегося -->
 
          <strong><a th:text="${user.getEmail()}">...</a></strong>
         <span class="text-start">с ролью:
@@ -42,8 +35,6 @@
         </li>
     </ul>
 </nav>
-
-<!--Левый бар-->
 
 <div class="row mt-5">
     <div class="col-2 fixed-left">

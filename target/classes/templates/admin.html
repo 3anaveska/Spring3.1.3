@@ -1,17 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <html lang="en">
 <head>
-  <!--мета тэги-->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!--Bootstrap CSS(есть в настройке к подключению буутстрапа https://bootstrap-4.ru/docs/4.5/getting-started/introduction/ -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <!--Скрипты(есть в настройке к подключению буутстрапа)-->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
           integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
           crossorigin="anonymous"></script>
@@ -28,14 +24,8 @@
 </head>
 <body>
 
-
-<!--Верхний бар(панель навигации, часть кода взята из https://bootstrap-4.ru/articles/cheatsheet/#navbar__bg-dark
-другая из инструкции к заданию https://getbootstrap.com/docs/4.0/components/navbar/-->
-
 <nav class="navbar navbar-dark bg-dark">
     <span class="navbar-brand mb-0 h1">
-
-        <!-- Для отображения имейла и роли залогинившегося -->
 
         <strong><a th:text="${user.getEmail()}"></a></strong>
         <span class="text-start">с ролью:
@@ -43,7 +33,6 @@
         </span>
     </span>
 
-  <!--кнопка логаут(выйти)-->
 
   <ul class="navbar-nav px-4">
     <li class="nav-item text-nowrap">
@@ -51,8 +40,6 @@
     </li>
   </ul>
 </nav>
-
-<!-- Левый бар -->
 
 <div class="row mt-5">
   <div class="col-2 fixed-left">
@@ -75,9 +62,6 @@
   <div class="col-10 bg-light">
     <h1>Панель администратора</h1>
 
-
-    <!-- Переключалка над таблицей между User table и New user -->
-
     <nav>
       <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
         <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
@@ -88,8 +72,6 @@
     </nav>
     <div class="tab-content" id="nav-tabContent">
 
-
-      <!-- All users -->
 
       <div id="nav-home" class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-home-tab">
         <p><strong>Все пользователи:</strong></p>
@@ -117,8 +99,6 @@
               <td><span th:each="roles : ${msg.getRoles()}" th:text="${roles} + ' '"></span>Roles</td>
 
 
-              <!-- Красная нопка Delete и синяя кнопка Edit -->
-
               <td>
                 <button th:href="${'#edit' + msg.getId()}" type="button" class="btn btn-info"
                         data-toggle="modal">Изменить
@@ -135,9 +115,6 @@
         </div>
       </div>
 
-
-      <!-- New user -->
-
       <div id="nav-profile" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-profile-tab">
         <p><strong>Новый пользователь</strong></p>
         <div class="container-fluid text-center col-2">
@@ -148,7 +125,7 @@
                   <label>Имя
                     <input type="text" name="name" id="name"
                            class="form-control"
-                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                           aria-label="Small" aria-describedby="inputGroup-sizing-sm" required maxlength="20">
                   </label>
                 </div>
               </div>
@@ -157,7 +134,7 @@
                   <label>Фамилия
                     <input type="text" name="lastName" id="lastName"
                            class="form-control"
-                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                           aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
                   </label>
                 </div>
               </div>
@@ -166,7 +143,7 @@
                   <label>Возраст
                     <input type="number" name="age" id="age"
                            class="form-control"
-                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                           aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
                   </label>
                 </div>
               </div>
@@ -174,7 +151,7 @@
                 <div class="input-group input-group-sm mb-3">
                   <label>Электронная почта
                     <input type="text" name="email" id="email" class="form-control"
-                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                           aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
                   </label>
                 </div>
               </div>
@@ -183,7 +160,7 @@
                   <label>Пароль
                     <input type="password" name="password" id="password"
                            class="form-control"
-                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                           aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
                   </label>
                 </div>
               </div>
@@ -191,11 +168,11 @@
                 <div class="form-group">
                   <label for="newRole">Роли</label>
                   <select id="newRole" class="custom-select bd-primary"
-                          size="2" name="nameRoles" multiple="multiple">
+                          size="2" name="nameRoles" multiple="multiple" required>
                     <option th:each="role : ${roleList}"
                             th:value="${role.name}"
                             th:text="${#strings.replace(role.name, 'ROLE_', '')}"
-                            th:selected="${role.name} == USER"
+                            th:selected="${role.name} == USER">
                     </option>
                   </select>
                 </div>
@@ -215,9 +192,6 @@
   </div>
 </div>
 
-
-<!-- Всплывающее окно edit -->
-<!-- На каждого юзера отдельное окно edit -->
 
 <div class="modal fade" th:each="editUser : ${userList}" th:id="${'edit' + editUser.getId()}">
   <div class="modal-dialog" role="document">
@@ -269,7 +243,7 @@
               <div class="form-group">
                 <label>Роль:
                   <select id="editRole" class="custom-select bd-primary"
-                          size="2" name="editRoles" multiple="multiple">
+                          size="2" name="editRoles" multiple="multiple" required>
                     <option th:each="role : ${roleList}"
                             th:value="${role.name}"
                             th:text="${#strings.replace(role.name, 'ROLE_', '')}"
@@ -289,10 +263,6 @@
     </div>
   </div>
 </div>
-
-
-<!-- Всплывающее окно delete -->
-<!-- На каждого юзера отдельное окно delete -->
 
 <div class="modal fade" th:each="deleteUser : ${userList}" th:id="${'delete' + deleteUser.getId()}">
   <div class="modal-dialog" role="document">
