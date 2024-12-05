@@ -6,6 +6,7 @@ import com.boots.service.UserService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,7 @@ public class AdminController {
 
 
     @GetMapping
-    public String allUsers(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user, Model model) {
+    public String allUsers(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", userService.getUserByEmail(user.getUsername()));
         model.addAttribute("userList", userService.listUsers());
         model.addAttribute("roleList", roleService.getAllRoles());
@@ -34,8 +35,7 @@ public class AdminController {
     @PostMapping
     public String createNewUser(@ModelAttribute("user") User user,
                                 @RequestParam(value = "nameRoles") String[] roles) {
-        user.setRoles(roleService.getSetOfRoles(roles));
-        userService.addUser(user);
+        userService.addUser(user, roles);
         return "redirect:/admin/";
     }
 
@@ -45,9 +45,8 @@ public class AdminController {
                                ModelMap model,
                                @PathVariable("id") long id,
                                @RequestParam(value = "editRoles") String[] roles) {
-        user.setRoles(roleService.getSetOfRoles(roles));
         model.addAttribute("roles", roleService.getAllRoles());
-        model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("user", userService.getUserById(id, user, roles));
         return "admin";
     }
 
@@ -56,7 +55,7 @@ public class AdminController {
                          @PathVariable("id") long id,
                          @RequestParam(value = "editRoles") String[] roles) {
         user.setRoles(roleService.getSetOfRoles(roles));
-        userService.updateUser(user);
+        userService.updateUser(user, roles);
         return "redirect:/admin/";
     }
 

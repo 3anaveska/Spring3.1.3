@@ -18,10 +18,11 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
 
     private final UserDao userDao;
+    private final RoleService roleService;
 
     @Autowired
     PasswordEncoder passwordEncoder() {
@@ -29,7 +30,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, RoleService roleService) {
+        this.roleService = roleService;
         this.userDao = userDao;
     }
 
@@ -41,22 +43,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void addUser(User user) {
+    public void addUser(User user, String[] roles) {
+        user.setRoles(roleService.getSetOfRoles(roles));
         userDao.addUser(user);
         passwordEncoder();
     }
 
     @Transactional(readOnly = true)
-    public User getUserById(Long id) {
-
-        return userDao.getUserById(id);
+    public User getUserById(Long id, User user, String[] roles) {
+        user.setRoles(roleService.getSetOfRoles(roles));
+        return userDao.getUserById(id, user, roles);
     }
 
     @Override
     @Transactional
-    public void updateUser(User user) {
-
-        userDao.updateUser(user);
+    public void updateUser(User user, String[] roles) {
+        user.setRoles(roleService.getSetOfRoles(roles));
+        userDao.updateUser(user, roles);
     }
 
     @Override
@@ -73,14 +76,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userDao.listUsers();
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userDao.getUserByEmail(email);
-        user.getAuthorities().size();
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("User '%s' not found", email));
-        }
-        return user.fromUser();
-    }
+
 }

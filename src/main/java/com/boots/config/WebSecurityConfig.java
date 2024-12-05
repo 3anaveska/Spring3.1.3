@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public WebSecurityConfig(SuccessUserHandler successUserHandler,
-                             @Qualifier("userServiceImpl") UserDetailsService userDetailsService) {
+                             @Qualifier("userSecurity") UserDetailsService userDetailsService) {
         this.successUserHandler = successUserHandler;
         this.userDetailsService = userDetailsService;
     }

@@ -2,9 +2,11 @@ package com.boots.dao;
 
 import com.boots.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -36,19 +38,28 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserById(Long id) {
+    public User getUserById(Long id, User user, String[] roles) {
+        try {
+            return entityManager.find(User.class, id);
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(String.format("Не существует id", id));
+        }
 
-        return entityManager.find(User.class, id);
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(User user, String[] roles) {
         entityManager.merge(user);
     }
 
     @Override
     public void removeUserById(Long id) {
-        entityManager.remove(entityManager.find(User.class, id));
+        try {
+            entityManager.remove(entityManager.find(User.class, id));
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(String.format("Не существует id", id));
+        }
+
     }
 
     @Override
